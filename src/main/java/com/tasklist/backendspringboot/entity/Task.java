@@ -6,8 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Timestamp;
-import java.util.Objects;
+import java.util.Date;
 
 @Entity
 @NoArgsConstructor
@@ -31,7 +30,7 @@ public class Task {
 
     @Basic
     @Column(name = "date")
-    private Timestamp date;
+    private Date date;
 
     @ManyToOne
     @JoinColumn(name = "priority_id", referencedColumnName = "id")
@@ -40,6 +39,5 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
-
 
 }
