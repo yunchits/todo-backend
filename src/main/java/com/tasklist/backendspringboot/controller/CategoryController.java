@@ -1,11 +1,11 @@
 package com.tasklist.backendspringboot.controller;
 
 import com.tasklist.backendspringboot.entity.Category;
+import com.tasklist.backendspringboot.entity.Priority;
 import com.tasklist.backendspringboot.repository.CategoryRepository;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.PublicKey;
 
@@ -20,8 +20,31 @@ public class CategoryController {
     }
 
     @PostMapping("/add")
-    public Category add(@RequestBody Category category) {
-        return categoryRepository.save(category);
+    public ResponseEntity<Category> add(@RequestBody Category category) {
+
+        if (category.getId() != null && category.getId() != 0) {
+            return new ResponseEntity("redundant param: is MUST be null", HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        if (category.getTitle() == null || category.getTitle().trim().length() == 0) {
+            return new ResponseEntity("missed param: title", HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        return ResponseEntity.ok(categoryRepository.save(category));
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<Category> update(@RequestBody Category category) {
+
+        if (category.getId() == null || category.getId() == 0) {
+            return new ResponseEntity("missed param: id", HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        if (category.getTitle() == null || category.getTitle().trim().length() == 0) {
+            return new ResponseEntity("missed param: title", HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        return ResponseEntity.ok(categoryRepository.save(category));
     }
 
 }
