@@ -1,5 +1,6 @@
 package com.tasklist.backendspringboot.controller;
 
+import com.tasklist.backendspringboot.entity.Category;
 import com.tasklist.backendspringboot.entity.Priority;
 import com.tasklist.backendspringboot.repository.PriorityRepository;
 import org.springframework.http.HttpStatus;
@@ -66,6 +67,19 @@ public class PriorityController {
                     "id " + id + " not found", HttpStatus.NOT_ACCEPTABLE);
         } else {
             return ResponseEntity.ok(priority.get());
+        }
+
+    }
+
+    @DeleteMapping("delete/{id}")
+    public ResponseEntity<Priority> delete(@PathVariable Long id) {
+
+        if (priorityRepository.findById(id).isEmpty()) {
+            return new ResponseEntity("incorrect id specified\n" +
+                    "id " + id + " not found", HttpStatus.NOT_ACCEPTABLE);
+        } else {
+            priorityRepository.deleteById(id);
+            return new ResponseEntity("successful deletion of category with id " + id, HttpStatus.OK);
         }
 
     }

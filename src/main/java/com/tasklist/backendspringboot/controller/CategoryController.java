@@ -62,4 +62,17 @@ public class CategoryController {
 
     }
 
+    @DeleteMapping("delete/{id}")
+    public ResponseEntity<Category> delete(@PathVariable Long id) {
+
+        if (categoryRepository.findById(id).isEmpty()) {
+            return new ResponseEntity("incorrect id specified\n" +
+                    "id " + id + " not found", HttpStatus.NOT_ACCEPTABLE);
+        } else {
+            categoryRepository.deleteById(id);
+            return new ResponseEntity("successful deletion of category with id " + id, HttpStatus.OK);
+        }
+
+    }
+
 }
