@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.PublicKey;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/category")
@@ -45,6 +46,20 @@ public class CategoryController {
         }
 
         return ResponseEntity.ok(categoryRepository.save(category));
+    }
+
+    @GetMapping("/id/{id}")
+    public ResponseEntity<Category> findById(@PathVariable Long id) {
+
+        Optional<Category> category = categoryRepository.findById(id);
+
+        if (category.isEmpty()) {
+            return new ResponseEntity("incorrect id specified\n" +
+                    "id " + id + " not found", HttpStatus.NOT_ACCEPTABLE);
+        } else {
+            return ResponseEntity.ok(category.get());
+        }
+
     }
 
 }

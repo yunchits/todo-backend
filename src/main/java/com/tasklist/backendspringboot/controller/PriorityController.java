@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/priority")
 public class PriorityController {
@@ -52,6 +54,20 @@ public class PriorityController {
         }
 
         return ResponseEntity.ok(priorityRepository.save(priority));
+    }
+
+    @GetMapping("/id/{id}")
+    public ResponseEntity<Priority> findById(@PathVariable Long id) {
+
+        Optional<Priority> priority = priorityRepository.findById(id);
+
+        if (priority.isEmpty()) {
+            return new ResponseEntity("incorrect id specified\n" +
+                    "id " + id + " not found", HttpStatus.NOT_ACCEPTABLE);
+        } else {
+            return ResponseEntity.ok(priority.get());
+        }
+
     }
 
 }
