@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.PublicKey;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -73,6 +74,11 @@ public class CategoryController {
             return new ResponseEntity("successful deletion of category with id " + id, HttpStatus.OK);
         }
 
+    }
+
+    @GetMapping("/all")
+    public List<Category> findAll() {
+        return categoryRepository.findAllByOrderByTitleAsc();
     }
 
 }

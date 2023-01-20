@@ -1,12 +1,12 @@
 package com.tasklist.backendspringboot.controller;
 
-import com.tasklist.backendspringboot.entity.Category;
 import com.tasklist.backendspringboot.entity.Priority;
 import com.tasklist.backendspringboot.repository.PriorityRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -82,6 +82,11 @@ public class PriorityController {
             return new ResponseEntity("successful deletion of category with id " + id, HttpStatus.OK);
         }
 
+    }
+
+    @GetMapping("/all")
+    public List<Priority> findAll() {
+        return priorityRepository.findAllByOrderByTitleAsc();
     }
 
 }
