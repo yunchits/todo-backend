@@ -3,6 +3,7 @@ package com.tasklist.backendspringboot.controller;
 import com.tasklist.backendspringboot.entity.Category;
 import com.tasklist.backendspringboot.entity.Priority;
 import com.tasklist.backendspringboot.repository.CategoryRepository;
+import com.tasklist.backendspringboot.search.CategorySearchValues;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -79,6 +80,11 @@ public class CategoryController {
     @GetMapping("/all")
     public List<Category> findAll() {
         return categoryRepository.findAllByOrderByTitleAsc();
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<List<Category>> search(@RequestBody CategorySearchValues categorySearchValues) {
+        return ResponseEntity.ok(categoryRepository.findByTitle(categorySearchValues.getText()));
     }
 
 }

@@ -2,6 +2,7 @@ package com.tasklist.backendspringboot.controller;
 
 import com.tasklist.backendspringboot.entity.Priority;
 import com.tasklist.backendspringboot.repository.PriorityRepository;
+import com.tasklist.backendspringboot.search.PrioritySearchValues;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -89,4 +90,8 @@ public class PriorityController {
         return priorityRepository.findAllByOrderByTitleAsc();
     }
 
+    @PostMapping("/search")
+    public ResponseEntity<List<Priority>> search(@RequestBody PrioritySearchValues prioritySearchValues) {
+        return ResponseEntity.ok(priorityRepository.findByTitle(prioritySearchValues.getText()));
+    }
 }
