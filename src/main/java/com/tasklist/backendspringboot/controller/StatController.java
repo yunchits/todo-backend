@@ -21,6 +21,7 @@ public class StatController {
 
     @GetMapping
     public ResponseEntity<Stat> getStat() {
+        System.out.println("StatController: getStat");
         return ResponseEntity.ok(statRepository.findById(DEFAULT_ID).get());
     }
 }

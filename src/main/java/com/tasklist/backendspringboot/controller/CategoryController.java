@@ -25,6 +25,8 @@ public class CategoryController {
     @PostMapping("/add")
     public ResponseEntity<Category> add(@RequestBody Category category) {
 
+        System.out.println("CategoryController: add");
+
         if (category.getId() != null && category.getId() != 0) {
             return new ResponseEntity("redundant param: is MUST be null", HttpStatus.NOT_ACCEPTABLE);
         }
@@ -38,6 +40,8 @@ public class CategoryController {
 
     @PutMapping("/update")
     public ResponseEntity<Category> update(@RequestBody Category category) {
+
+        System.out.println("CategoryController: update");
 
         if (category.getId() == null || category.getId() == 0) {
             return new ResponseEntity("missed param: id", HttpStatus.NOT_ACCEPTABLE);
@@ -53,6 +57,8 @@ public class CategoryController {
     @GetMapping("/id/{id}")
     public ResponseEntity<Category> findById(@PathVariable Long id) {
 
+        System.out.println("CategoryController: findById");
+
         Optional<Category> category = categoryRepository.findById(id);
 
         if (category.isEmpty()) {
@@ -67,6 +73,8 @@ public class CategoryController {
     @DeleteMapping("delete/{id}")
     public ResponseEntity<Category> delete(@PathVariable Long id) {
 
+        System.out.println("CategoryController: delete");
+
         if (categoryRepository.findById(id).isEmpty()) {
             return new ResponseEntity("incorrect id specified\n" +
                     "id " + id + " not found", HttpStatus.NOT_ACCEPTABLE);
@@ -79,11 +87,13 @@ public class CategoryController {
 
     @GetMapping("/all")
     public List<Category> findAll() {
+        System.out.println("CategoryController: findAll");
         return categoryRepository.findAllByOrderByTitleAsc();
     }
 
     @PostMapping("/search")
     public ResponseEntity<List<Category>> search(@RequestBody CategorySearchValues categorySearchValues) {
+        System.out.println("CategoryController: search");
         return ResponseEntity.ok(categoryRepository.findByTitle(categorySearchValues.getText()));
     }
 

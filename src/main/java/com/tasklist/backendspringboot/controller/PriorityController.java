@@ -23,6 +23,8 @@ public class PriorityController {
     @PostMapping ("/add")
     public ResponseEntity<Priority> add(@RequestBody Priority priority) {
 
+        System.out.println("PriorityController: add");
+
         //ResponseEntity special object that can contain object + status
 
         if (priority.getId() != null && priority.getId() != 0) {
@@ -43,6 +45,8 @@ public class PriorityController {
     @PutMapping("/update")
     public ResponseEntity<Priority> update(@RequestBody Priority priority) {
 
+        System.out.println("PriorityController: update");
+
         if (priority.getId() == null || priority.getId() == 0) {
             return new ResponseEntity("missed param: id", HttpStatus.NOT_ACCEPTABLE);
         }
@@ -61,6 +65,8 @@ public class PriorityController {
     @GetMapping("/id/{id}")
     public ResponseEntity<Priority> findById(@PathVariable Long id) {
 
+        System.out.println("PriorityController: findById");
+
         Optional<Priority> priority = priorityRepository.findById(id);
 
         if (priority.isEmpty()) {
@@ -75,6 +81,8 @@ public class PriorityController {
     @DeleteMapping("delete/{id}")
     public ResponseEntity<Priority> delete(@PathVariable Long id) {
 
+        System.out.println("PriorityController: delete");
+
         if (priorityRepository.findById(id).isEmpty()) {
             return new ResponseEntity("incorrect id specified\n" +
                     "id " + id + " not found", HttpStatus.NOT_ACCEPTABLE);
@@ -87,11 +95,13 @@ public class PriorityController {
 
     @GetMapping("/all")
     public List<Priority> findAll() {
+        System.out.println("PriorityController: findAll");
         return priorityRepository.findAllByOrderByTitleAsc();
     }
 
     @PostMapping("/search")
     public ResponseEntity<List<Priority>> search(@RequestBody PrioritySearchValues prioritySearchValues) {
+        System.out.println("PriorityController: search");
         return ResponseEntity.ok(priorityRepository.findByTitle(prioritySearchValues.getText()));
     }
 }
