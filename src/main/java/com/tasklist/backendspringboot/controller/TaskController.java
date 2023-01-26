@@ -1,9 +1,12 @@
 package com.tasklist.backendspringboot.controller;
 
-import com.tasklist.backendspringboot.entity.Priority;
 import com.tasklist.backendspringboot.entity.Task;
 import com.tasklist.backendspringboot.repository.TaskRepository;
 import com.tasklist.backendspringboot.search.TaskSearchValues;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -91,16 +94,34 @@ public class TaskController {
     }
 
     @PostMapping("/search")
-    public ResponseEntity<List<Task>> search(@RequestBody TaskSearchValues taskSearchValues) {
+    public ResponseEntity<Page<Task>> search(@RequestBody TaskSearchValues taskSearchValues) {
 
         System.out.println("TaskController: search");
 
         String title = taskSearchValues.getTitle() != null ? taskSearchValues.getTitle() : null;
-        Integer completed = taskSearchValues.getCompleted () != null ? taskSearchValues.getCompleted () : null;
-        Long priorityId = taskSearchValues.getPriorityId () != null ? taskSearchValues.getPriorityId () : null;
-        Long categoryId = taskSearchValues.getCategoryId () != null ? taskSearchValues.getCategoryId() : null;
+        Integer completed = taskSearchValues.getCompleted() != null ? taskSearchValues.getCompleted() : null;
+        Long priorityId = taskSearchValues.getPriorityId() != null ? taskSearchValues.getPriorityId() : null;
+        Long categoryId = taskSearchValues.getCategoryId() != null ? taskSearchValues.getCategoryId() : null;
 
-        return ResponseEntity.ok(taskRepository.findByParams(title, completed, priorityId, categoryId));
+        String sortColumn = taskSearchValues.getSortColumn() != null ? taskSearchValues.getSortColumn() : null;
+        String sortDirection = taskSearchValues.getSortDirection() != null ? taskSearchValues.getSortDirection() : null;
+
+        Sort.Direction direction;
+        if (sortDirection == null || sortDirection.trim().length() == 0 || sortDirection.trim().equals("asc")) {
+            direction = Sort.Direction.ASC;
+        } else {
+            direction = Sort.Direction.DESC;
+        }
+
+        Sort sort = Sort.by(direction, sortColumn);
+
+        Integer pageNumber = taskSearchValues.getPageNumber() != null ? taskSearchValues.getPageNumber() : null;
+        Integer pageSize = taskSearchValues.getPageSize() != null ? taskSearchValues.getPageSize() : null;
+
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sort);
+
+        return ResponseEntity.ok(taskRepository.findByParams(title, completed, priorityId,
+                categoryId, pageRequest));
     }
 
 }
